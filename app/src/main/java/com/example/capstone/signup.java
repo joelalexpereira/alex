@@ -170,7 +170,7 @@ private String uCount;
                                 }
                             });
 
-                            reff = FirebaseDatabase.getInstance().getReference().child("Users");
+                            reff = FirebaseDatabase.getInstance().getReference().child("signal");
 
                             /*DocumentReference noteRef = fstore.document("UserNum/Num");
                             noteRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -185,10 +185,10 @@ private String uCount;
                             note.put("UNum", String.valueOf(uCount+1));
                             noteRef.set(note);*/
 
-                            reff.child("User_"+String.valueOf(3)).child("E-Mail").setValue(em);
-                            reff.child("User_"+String.valueOf(3)).child("First Name").setValue(fn);
-                            reff.child("User_"+String.valueOf(3)).child("Last Name").setValue(ln);
-                            reff.child("User_"+String.valueOf(3)).child("Phone").setValue(ph);
+                            reff.child("2").child("E-Mail").setValue(em);
+                            reff.child("2").child("First Name").setValue(fn);
+                            reff.child("2").child("Last Name").setValue(ln);
+                            reff.child("2").child("Phone").setValue(ph);
 
                             openEmail();
                         } else {

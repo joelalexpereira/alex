@@ -1,35 +1,30 @@
 package com.example.capstone;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class add extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class update extends AppCompatActivity {
     private EditText firstname, lastname, phone, email;
     private Button save, cancel;
     FirebaseAuth fAuth;
@@ -37,36 +32,24 @@ public class add extends AppCompatActivity {
     FirebaseFirestore fstore;
     String userID;
     int numOfDrivers;
-    private String fn, ln, em, ph;
+    private String fn, ln, ph;
     DatabaseReference reff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_update );
 
-        firstname = (EditText) findViewById(R.id.fname);
-        lastname = (EditText) findViewById(R.id.lname);
-        phone = (EditText) findViewById(R.id.phone);
-        email = (EditText) findViewById(R.id.email);
-        save = (Button) findViewById(R.id.adddriver);
-        cancel = (Button) findViewById(R.id.cancel);
+        firstname = (EditText) findViewById(R.id.fname2);
+        lastname = (EditText) findViewById(R.id.lname2);
+        phone = (EditText) findViewById(R.id.phone2);
+        save = (Button) findViewById(R.id.adddriver2);
+        cancel = (Button) findViewById(R.id.cancel2);
 
         fAuth = FirebaseAuth.getInstance();
         fstore = FirebaseFirestore.getInstance();
 
         userID = fAuth.getCurrentUser().getUid();
-
-        DocumentReference documentReference = fstore.collection("users").document(userID);
-
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-
-                String test = value.getString("Number of Drivers");
-                numOfDrivers = Integer.parseInt(test);
-            }
-        });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +57,6 @@ public class add extends AppCompatActivity {
                 fn = firstname.getText().toString().trim();
                 ln = lastname.getText().toString().trim();
                 ph = phone.getText().toString().trim();
-                em = email.getText().toString().trim();
 
                 if(TextUtils.isEmpty(fn)){
                     firstname.setError("First name is Required.");
@@ -102,31 +84,37 @@ public class add extends AppCompatActivity {
                     return;
                 }
 
-                if(TextUtils.isEmpty(em)){
-                    email.setError("Email is Required.");
-                    return;
-                }
-
-                numOfDrivers++;
 
                 DocumentReference documentReference = fstore.collection("users").document(userID);
                 Map<String,Object> user = new HashMap<>();
-                user.put("First Name"+String.valueOf(numOfDrivers),fn);
-                user.put("Last Name"+String.valueOf(numOfDrivers),ln);
-                user.put("Email"+String.valueOf(numOfDrivers),em);
-                user.put("Phone Number"+String.valueOf(numOfDrivers),ph);
-                user.put("Number of Drivers",String.valueOf(numOfDrivers));
+                documentReference.update("First Name",fn);
+                documentReference.update("Last Name",ln);
+                documentReference.update("Phone Number",ph);
                 documentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                     }
                 });
-
                 reff = FirebaseDatabase.getInstance().getReference().child("signal");
-                reff.child("2").child("E-Mail").setValue(em);
-                reff.child("2").child("First Name").setValue(fn);
-                reff.child("2").child("Last Name").setValue(ln);
-                reff.child("2").child("Phone").setValue(ph);
+                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null) {
+                                String e = document.getString("Email");
+                                reff.child("4").child("E-Mail").setValue(e);
+                            } else {
+                                Log.d("LOGGER", "No such document");
+                            }
+                        } else {
+                            Log.d("LOGGER", "get failed with ", task.getException());
+                        }
+                    }
+                });
+                reff.child("4").child("First Name").setValue(fn);
+                reff.child("4").child("Last Name").setValue(ln);
+                reff.child("4").child("Phone").setValue(ph);
                 openDriver();
             }
         });

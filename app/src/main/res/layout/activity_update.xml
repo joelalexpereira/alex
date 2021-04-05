@@ -12,11 +12,11 @@
         layout="@layout/toolbar"/>
 
     <TextView
-        android:id="@+id/adddrivertitle"
+        android:id="@+id/updatedrivertitle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="Add Driver"
+        android:text="Update Main Driver"
         android:textColor="#ffffff"
         android:autoSizeMaxTextSize="30dp"
         android:autoSizeMinTextSize="18dp"
@@ -26,10 +26,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6"
         app:layout_constraintBottom_toBottomOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintEnd_toEndOf="@id/guideline1" />
+        app:layout_constraintEnd_toEndOf="@id/guideline1"  />
 
     <EditText
-        android:id="@+id/fname"
+        android:id="@+id/fname2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/loginedittext"
@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="@id/guideline3"/>
 
     <EditText
-        android:id="@+id/lname"
+        android:id="@+id/lname2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/loginedittext"
@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="@id/guideline3"/>
 
     <EditText
-        android:id="@+id/phone"
+        android:id="@+id/phone2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/loginedittext"
@@ -67,25 +67,12 @@
         app:layout_constraintStart_toStartOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="@id/guideline3"/>
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/loginedittext"
-        android:hint="Email"
-        android:paddingLeft="10dp"
-        android:textColorHint="#ffffff"
-        app:layout_constraintTop_toTopOf="@+id/guideline14"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline15"
-        app:layout_constraintStart_toStartOf="@id/guideline2"
-        app:layout_constraintEnd_toEndOf="@id/guideline3"/>
-
     <Button
-        android:id="@+id/adddriver"
+        android:id="@+id/adddriver2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/mybutton"
-        android:text="Add Driver"
+        android:text="Update Driver"
         android:textColor="#1D3790"
         android:autoSizeMaxTextSize="16sp"
         android:autoSizeMinTextSize="8sp"
@@ -97,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="@id/guideline4" />
 
     <Button
-        android:id="@+id/cancel"
+        android:id="@+id/cancel2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/mybutton"
@@ -124,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.38" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

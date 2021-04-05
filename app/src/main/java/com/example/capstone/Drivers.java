@@ -1,5 +1,6 @@
 package com.example.capstone;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,7 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -34,10 +39,11 @@ public class Drivers extends AppCompatActivity{
     private eAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ArrayList<driveritem> mExampleList = new ArrayList<>();
-    private Button add, remove;
+    private Button add, remove, update;
     String Fname, email, phone;
     int numOfDrivers;
     int removeP;
+    DatabaseReference reff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,7 @@ public class Drivers extends AppCompatActivity{
         fstore = FirebaseFirestore.getInstance();
         add = findViewById(R.id.adddriver);
         remove = findViewById(R.id.removedriver);
+        update = findViewById(R.id.updatedriver);
 
         userID = fAuth.getCurrentUser().getUid();
 
@@ -101,6 +108,13 @@ public class Drivers extends AppCompatActivity{
             }
         });
 
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDriver();
+            }
+        });
+
     }
 
     public void addDriver(){
@@ -111,17 +125,45 @@ public class Drivers extends AppCompatActivity{
         if(removeP != 0){
             Map<String,Object> user = new HashMap<>();
             DocumentReference documentReference = fstore.collection("users").document(userID);
+            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null) {
+                            String f = document.getString("First Name"+String.valueOf(removeP+1));
+                            String l = document.getString("Last Name"+String.valueOf(removeP+1));
+                            String e = document.getString("Email"+String.valueOf(removeP+1));
+                            String p = document.getString("Phone Number"+String.valueOf(removeP+1));
+                            reff = FirebaseDatabase.getInstance().getReference().child("signal");
+                            reff.child("3").child("First Name").setValue(f);
+                            reff.child("3").child("Last Name").setValue(l);
+                            reff.child("3").child("Phone").setValue(p);
+                            reff.child("3").child("E-Mail").setValue(e);
+                        } else {
+                            Log.d("LOGGER", "No such document");
+                        }
+                    } else {
+                        Log.d("LOGGER", "get failed with ", task.getException());
+                    }
+                }
+            });
             documentReference.update("First Name"+String.valueOf(removeP+1), FieldValue.delete());
             documentReference.update("Last Name"+String.valueOf(removeP+1), FieldValue.delete());
             documentReference.update("Email"+String.valueOf(removeP+1), FieldValue.delete());
             documentReference.update("Phone Number"+String.valueOf(removeP+1), FieldValue.delete());
             user.put("Number of Drivers",String.valueOf(removeP));
             documentReference.update(user);
+
             finish();
             startActivity(getIntent());
         } else {
             Toast.makeText(Drivers.this, "Cannot delete main driver", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void updateDriver(){
+        startActivity(new Intent(getApplicationContext(), update.class));
     }
 
     public void logout(View view){
