@@ -44,8 +44,8 @@
         android:background="@drawable/mybutton"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
         app:layout_constraintBottom_toBottomOf="@+id/guideline9"
-        app:layout_constraintStart_toStartOf="@id/guideline10"
-        app:layout_constraintEnd_toEndOf="@id/guideline11" />
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="@id/guideline3" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -116,20 +116,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
